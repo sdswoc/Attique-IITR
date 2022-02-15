@@ -26,7 +26,9 @@ CREATE TABLE `acadinformation` (
   `enrollment_number` int DEFAULT NULL,
   `time_stamp` varchar(255) DEFAULT NULL,
   `upvotes` int DEFAULT NULL,
-  `tag` varchar(255) DEFAULT NULL
+  `tag` varchar(255) DEFAULT NULL,
+  KEY `enrollment_number` (`enrollment_number`),
+  CONSTRAINT `acadinformation_ibfk_1` FOREIGN KEY (`enrollment_number`) REFERENCES `students` (`enrollment_number`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -69,10 +71,12 @@ DROP TABLE IF EXISTS `clubinformation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `clubinformation` (
-  `club_id` int NOT NULL,
+  `club_id` int DEFAULT NULL,
   `time_stamp` varchar(255) DEFAULT NULL,
   `upvotes` int DEFAULT NULL,
-  `tag` varchar(255) DEFAULT NULL
+  `tag` varchar(255) DEFAULT NULL,
+  KEY `club_id` (`club_id`),
+  CONSTRAINT `clubinformation_ibfk_1` FOREIGN KEY (`club_id`) REFERENCES `club` (`club_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -142,4 +146,4 @@ CREATE TABLE `sub_branch` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-02-16  0:23:45
+-- Dump completed on 2022-02-16  1:15:00
