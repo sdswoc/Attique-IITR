@@ -10,6 +10,11 @@ My aim is to create a common platform for IIT-R junta where they can find and ac
 
 - [Darshan Kumar](https://github.com/itsdarshankumar)
 
+## Mentors
+
+- [Archit Gosain](https://github.com/Aviii06)
+- [Reeshita Paul](https://github.com/reeshi-18)
+
 ## License
 
 Licensed under the [MIT License](LICENSE)
