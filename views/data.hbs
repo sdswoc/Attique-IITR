@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-6">
+    Branch Name
+  </div>
+  <div class="col-6 d-flex justify-content-end">
+    <a
+      href="/addpost"
+      type="button"
+      class="btn btn-primary align-self-center m-2"
+    >Post</a>
+    <a
+      href="/filter"
+      type="button"
+      class="btn btn-primary align-self-center"
+    >Filter</a>
+  </div>
+</div>
+
+<table class="table table-hover table-light">
+  <thead>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Name</th>
+      <th scope="col">Category</th>
+      <th scope="col">Information</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    {{#each data}}
+
+      <tr>
+        <th scope="row">{{this.time_stamp}}</th>
+        <td>{{this.enrollment_number}}</td>
+        <td>{{this.tag}}</td>
+        <td>{{this.message}}</td>
+      </tr>
+
+    {{/each}}
+  </tbody>
+</table>
