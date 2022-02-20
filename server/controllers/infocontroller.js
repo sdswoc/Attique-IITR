@@ -1,9 +1,11 @@
 const res = require("express/lib/response");
-const db = require("/Users/Darshan Kumar/Desktop/Attique/database.js");
+const db = require("D:/Attique-IITR/database"); //check path
 const express = require("express");
 const { use } = require("../routes/inforoute");
 const app = express();
 app.use(express.json());
+
+//view data
 exports.view = (req, res) => {
   console.log("welcome to the first connection");
 
@@ -17,9 +19,9 @@ exports.view = (req, res) => {
   });
 };
 
-exports.add = (req, res) => {
+//filling data
+exports.addacad = (req, res) => {
   console.log("adding post");
-  //filling data
   console.log(req.body);
   const { enrollment_number, time_stamp, message, tag } = req.body;
 
@@ -36,10 +38,34 @@ exports.add = (req, res) => {
       ")",
     (err, rows) => {
       if (!err) {
-        res.redirect("/");
+        res.redirect("/acad");
       } else {
         console.log(err);
       }
     }
   );
 };
+
+//filter the data
+exports.filteracad = (req, res) => {
+  console.log(req.body);
+  const tag = req.body.tag;
+  db.query(
+    "SELECT * FROM acadinformation WHERE tag=" + db.escape(tag),
+    (err, rows) => {
+      if (!err) {
+        res.render("data", { layout: "information", data: rows });
+      } else {
+        console.log(err);
+      }
+    }
+  );
+};
+
+//delete data
+/*exports.deleteacad=(req,res)=>{
+  console.log("User requested to delete data")
+  db.query(
+    "DELETE FROM acadinformation WHERE"
+  )
+}*/
