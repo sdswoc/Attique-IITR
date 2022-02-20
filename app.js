@@ -17,8 +17,10 @@ app.engine(".hbs", handlebars.engine);
 app.set("view engine", ".hbs");
 const routesacadinfo = require("./server/routes/inforoute");
 const rootroute = require("./server/routes/loginroute");
+const dashroute=require("./server/routes/dashboardroute.js")
 app.use("/acad", routesacadinfo);
 app.use("/", rootroute);
+app.use("/dashboard",dashroute)
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
