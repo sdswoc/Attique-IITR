@@ -1,18 +1,25 @@
 const res = require("express/lib/response");
 const mysql = require("mysql");
 
-const pool = mysql.createPool({
-  connectionLimit: 100,
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-});
+const options = {
+  
+    connectionLimit: 100,
+    password: process.env.DB_PASS,
+    user: process.env.DB_USER,
+    database: process.env.DB_NAME,
+    host: process.env.DB_HOST,
+    port: 5000,
+    createDatabaseTable: true,
+    
+  
+}
+
+const pool = mysql.createPool(options);
 
 pool.getConnection((err, connection) => {
   if (err) throw err;
   console.log(`Database connected succesfully`);
-  connection.release();
+  connection.release(error => error ? reject(error) : resolve());
 });
 
-module.exports = pool;
+module.exports = pool,options;
