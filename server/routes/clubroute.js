@@ -1,0 +1,11 @@
+const express = require("express");
+const router = express.Router();
+const clubcontroller = require("../controllers/clubcontroller");
+router.get("/login", clubcontroller.clublogin);
+router.post("/login", clubcontroller.loginsubmit);
+router.post("/logout", clubcontroller.logout);
+router.get("/", clubcontroller.clubview);
+router.post("/addclubpost", clubcontroller.addclub);
+router.post("/filterclub", clubcontroller.filterclub);
+router.post("/deleteclub", clubcontroller.deleteclub);
+module.exports = router;

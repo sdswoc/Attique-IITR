@@ -1,37 +1,11 @@
-const res = require("express/lib/response");
 const db = require("D:/Attique-IITR/database"); //check path
 const express = require("express");
 const bcrypt = require("bcrypt");
-const { use } = require("../routes/loginroute.js");
-const session=require("express-session")
-const cookie=require("cookie-parser")
-const mysqlStore = require('express-mysql-session')(session);
-const sessionStore = new mysqlStore(db.options);
 
 const app = express();
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
-app.use(cookie())
-
-app.use(session({
-  name: process.env.SESS_NAME,
-  resave : false,
-  saveUninitialized : false,
-  store:sessionStore,
-  secret:process.env.SESS_SECRET,
-  cookie : {
-    httpOnly: true,
-    maxAge: 1000*60*60*24 //1 day
-  }
-}))
-
-
-//login
-exports.login = (req, res) => {
-  console.log("User Detected");
-  res.sendFile("D:/Attique-IITR/index.html"); //static path
-};
 //logincheck hashing
 exports.loginsubmit = (req, res) => {
   console.log("Login Attempted");
@@ -48,7 +22,9 @@ exports.loginsubmit = (req, res) => {
         } else {
           const verified = bcrypt.compareSync(reqpassword, rows[0]["pass"]);
           if (verified) {
-            console.log(session);
+            console.log("login succefull");
+            req.session.userinfo = rows[0].enrollment_number; //session
+
             res.redirect("/acad");
           } else {
             res.send("Incorrect Enrollment number or password");
@@ -61,10 +37,22 @@ exports.loginsubmit = (req, res) => {
   );
 };
 
+//login students
+exports.login = (req, res) => {
+  console.log("User Detected");
+  if (req.session.userinfo) {
+    return res.redirect("/acad");
+  } else {
+    return res.sendFile("D:/Attique-IITR/views/screens/index.html"); //static file
+  }
+
+  //static path
+};
+
 //signup
 exports.signup = (req, res) => {
   console.log("signup detect");
-  res.sendFile("D:/Attique-IITR/sign-up.html"); //static path
+  res.sendFile("D:/Attique-IITR/views/screens/sign-up.html"); //static path
 };
 //basic signup entry
 exports.signupentry = (req, res) => {
@@ -128,4 +116,15 @@ exports.signupentry = (req, res) => {
   } else {
     res.send("Both passwords not same");
   }
+};
+
+//logout
+exports.logout = (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.redirect("/acad");
+    }
+    res.clearCookie(process.env.SESS_NAME);
+    res.redirect("/");
+  });
 };

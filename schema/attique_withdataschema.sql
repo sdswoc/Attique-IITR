@@ -27,9 +27,12 @@ CREATE TABLE `acadinformation` (
   `time_stamp` varchar(255) DEFAULT NULL,
   `upvotes` int DEFAULT NULL,
   `tag` varchar(255) DEFAULT NULL,
+  `message` varchar(360) DEFAULT NULL,
+  `msgID` int NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`msgID`),
   KEY `enrollment_number` (`enrollment_number`),
   CONSTRAINT `acadinformation_ibfk_1` FOREIGN KEY (`enrollment_number`) REFERENCES `students` (`enrollment_number`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,6 +41,7 @@ CREATE TABLE `acadinformation` (
 
 LOCK TABLES `acadinformation` WRITE;
 /*!40000 ALTER TABLE `acadinformation` DISABLE KEYS */;
+INSERT INTO `acadinformation` VALUES (21112040,'25-02-2022 03:33',NULL,'general','testing',1),(21112040,'25-02-2022 03:33',NULL,'general','second testing',2),(21112040,'25-02-2022 03:33',NULL,'general','third testing',3),(21112040,'25-02-2022 03:33',NULL,'general','fourth testing',4);
 /*!40000 ALTER TABLE `acadinformation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -104,6 +108,8 @@ CREATE TABLE `clubinformation` (
   `time_stamp` varchar(255) DEFAULT NULL,
   `upvotes` int DEFAULT NULL,
   `tag` varchar(255) DEFAULT NULL,
+  `msgID` int NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`msgID`),
   KEY `club_id` (`club_id`),
   CONSTRAINT `clubinformation_ibfk_1` FOREIGN KEY (`club_id`) REFERENCES `club` (`club_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -175,6 +181,7 @@ CREATE TABLE `students` (
 
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
+INSERT INTO `students` VALUES (21112040,'Darshan ','Kumar','d_kumar@ch.iitr.ac.in',1,'$2b$10$EV5qVMcBLbwcYcOqQFirneRfe7ZIxqed8zUJXNfS5Ga/BYcg/J7iu',NULL,NULL,NULL),(21112051,'Gurmannat','Sohal','g_sohal@ch.iitr.ac.in',1,'$2b$10$/lgGeiYGCBHYFjkQPElszu6v2JiB5gigPf98BIpL4EV3YhtDG1nCy',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -213,4 +220,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-02-16  1:15:42
+-- Dump completed on 2022-02-25  3:19:19

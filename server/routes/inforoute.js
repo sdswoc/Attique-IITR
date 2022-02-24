@@ -5,5 +5,5 @@ const infocontroller=require('../controllers/infocontroller')
 router.get('/',infocontroller.view)
 router.post('/addacadpost',infocontroller.addacad)
 router.post('/filteracad',infocontroller.filteracad)
-
+router.post('/deleteacad',infocontroller.deleteacad)
 module.exports = router;
