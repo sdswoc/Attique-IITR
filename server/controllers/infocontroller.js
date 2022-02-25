@@ -78,7 +78,7 @@ exports.filteracad = (req, res) => {
 
 //delete data
 exports.deleteacad = (req, res) => {
-  if (req.session.userinfo) {
+  if (true) {
     const { msgID } = req.body;
     console.log("User requested to delete data");
     db.query(
