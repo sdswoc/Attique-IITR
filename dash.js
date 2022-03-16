@@ -16,7 +16,7 @@ function year (){
           showCancelButton: true,
           inputValidator: (value) => {
             return new Promise((resolve) => {
-              if (value != ' ') {
+              if (value != '') {
                 resolve()
               } else {
                 resolve('You need to select year :)')
