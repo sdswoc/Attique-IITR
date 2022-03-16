@@ -14,10 +14,10 @@ router.get("/channeli", passport.authenticate("oauth2"));
 
 router.get(
   "/callback",
-  passport.authenticate("oauth2", { failureRedirect: "/", session: false }),
+  passport.authenticate("oauth2", { failureRedirect: "/acad", session: false }),
   function (req, res) {
     // Successful authentication, redirect home.
-    console.log("success")
+    console.log("success");
     res.redirect("/acad");
   }
 );
@@ -52,8 +52,9 @@ passport.use(
                 if (rows[0] === undefined) {
                   //kuch daalunga abhi
                 } else {
-                  console.log("hurray");
-                  return cb();
+                  console.log(rows[0]);
+                  req.session.userinfo = rows[0].enrollment_number; //session
+                  return cb(null, Http.responseText);
                 }
               }
             }
@@ -64,4 +65,4 @@ passport.use(
   )
 );
 
-(module.exports = router), passport;
+module.exports = router;
