@@ -86,13 +86,13 @@ table tr:nth-child(2n + 1) {
     position: absolute;
   }
   td:nth-child(2):before {
-    content: "Name:";
+    content: "Date:";
   }
   td:nth-child(3):before {
-    content: "Email:";
+    content: "Category:";
   }
   td:nth-child(4):before {
-    content: "Phone:";
+    content: "Comments:";
   }
   td:nth-child(5):before {
     content: "Comments:";
@@ -161,4 +161,11 @@ table tr:nth-child(2n + 1) {
     box-shadow: none;
     overflow: visible;
   }
+}
+
+.add,
+.filter {
+  position: relative;
+  left: 67%;
+  top: 2%;
 }

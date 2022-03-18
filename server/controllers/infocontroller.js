@@ -14,11 +14,11 @@ exports.view = (req, res) => {
 
     db.query("SELECT * FROM acadinformation", (err, rows) => {
       if (!err) {
+        console.log('wtf')
         res.render("data", { layout: "information", data: rows });
       } else {
         console.log(err);
       }
-      console.log(rows);
     });
   } else {
     res.redirect("/");

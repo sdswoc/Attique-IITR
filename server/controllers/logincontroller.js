@@ -6,6 +6,8 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+let eno = 123;
+
 //logincheck hashing
 exports.loginsubmit = (req, res) => {
   console.log("Login Attempted");
@@ -23,9 +25,10 @@ exports.loginsubmit = (req, res) => {
           const verified = bcrypt.compareSync(reqpassword, rows[0]["pass"]);
           if (verified) {
             console.log("login succefull");
+            eno = reqenrollment_number;
             req.session.userinfo = rows[0].enrollment_number; //session
 
-            res.redirect("/acad");
+            res.redirect("/dashboard");
           } else {
             res.send("Incorrect Enrollment number or password");
           }
@@ -66,47 +69,62 @@ exports.signupentry = (req, res) => {
     year,
     password,
     password_repeat,
+    branch,
   } = req.body;
+  console.log(branch);
   //confirming both password are same
   if (password === password_repeat) {
     //Implementing hashing and storing data
     bcrypt.hash(password, 10, (err, hash) => {
       if (!err) {
         db.query(
-          "SELECT * FROM students WHERE enrollment_number=" +
-            db.escape(enrollment_number),
+          `SELECT * FROM branch WHERE branch_name = "${branch}"`,
           (err, rows) => {
             if (!err) {
-              console.log(rows);
-              if (rows[0] === undefined) {
-                console.log("unique user");
-                db.query(
-                  "INSERT INTO students (enrollment_number,first_name,second_name,email,study_year,pass) VALUES (" +
-                    db.escape(enrollment_number) +
-                    "," +
-                    db.escape(first_name) +
-                    "," +
-                    db.escape(second_name) +
-                    "," +
-                    db.escape(email) +
-                    "," +
-                    db.escape(year) +
-                    "," +
-                    db.escape(hash) +
-                    ")",
-                  (err, row) => {
-                    if (!err) {
-                      console.log("yo!! welcome to the fam");
-                      res.redirect("/");
+              const branch_id = rows[0].branch_id;
+              db.query(
+                "SELECT * FROM students WHERE enrollment_number=" +
+                  db.escape(enrollment_number),
+                (err, rows) => {
+                  if (!err) {
+                    console.log(rows);
+                    if (rows[0] === undefined) {
+                      console.log("unique user");
+                      db.query(
+                        "INSERT INTO students (enrollment_number,first_name,second_name,email,study_year,pass,branch_id,role_id) VALUES (" +
+                          db.escape(enrollment_number) +
+                          "," +
+                          db.escape(first_name) +
+                          "," +
+                          db.escape(second_name) +
+                          "," +
+                          db.escape(email) +
+                          "," +
+                          db.escape(year) +
+                          "," +
+                          db.escape(hash) +
+                          "," +
+                          db.escape(branch_id) +
+                          ", 1" +
+                          ")",
+                        (err, row) => {
+                          if (!err) {
+                            console.log("yo!! welcome to the fam");
+                            res.redirect("/");
+                          } else {
+                            console.log(err);
+                          }
+                        }
+                      );
                     } else {
-                      console.log(err);
+                      res.send("User Already Exits");
                     }
-                  }
-                );
-              } else {
-                res.send("User Already Exits");
-              }
-            } else console.log(err);
+                  } else console.log(err);
+                }
+              );
+            } else {
+              console.log(err);
+            }
           }
         );
       } else {

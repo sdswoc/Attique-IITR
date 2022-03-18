@@ -12,6 +12,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 
 app.use(cookie());
+const cors = require("cors");
+app.use(cors());
 
 app.use(
   session({
@@ -33,12 +35,12 @@ const routesacadinfo = require("./server/routes/inforoute");
 const rootroute = require("./server/routes/loginroute");
 const dashroute = require("./server/routes/dashboardroute.js");
 const clubroute = require("./server/routes/clubroute");
-const oauth=require("./oauth2.0.js")
+const oauth = require("./oauth2.0.js");
 app.use("/acad", routesacadinfo);
 app.use("/", rootroute);
 app.use("/dashboard", dashroute);
 app.use("/club", clubroute);
-app.use("/oauth",oauth)
+app.use("/oauth", oauth);
 app.listen(port, () => {
   console.log(`listening on port ${port}`);
 });

@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -16,12 +15,13 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"
     />
     <link rel="stylesheet" href="/assets/css/styles.min.css" />
+    <link rel="stylesheet" href="/assets/css/info.css" />
   </head>
 
   <body style="background: var(--bs-gray)">
     <nav class="navbar navbar-light navbar-expand-md bg-white">
       <div class="container-fluid">
-        <a class="navbar-brand" href="/">Brand</a><button
+        <a class="navbar-brand" href="/">ATTIQUE IITR</a><button
           data-bs-toggle="collapse"
           class="navbar-toggler"
           data-bs-target="#navcol-1"
@@ -35,19 +35,27 @@
           id="navcol-1"
         >
           <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="#">Academics</a></li>
+            <li class="nav-item"><a class="nav-link" href="/dashboard">Academics</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Clubs</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Logout</a></li>
+            <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Help</a></li>
             <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
           </ul>
         </div>
       </div>
     </nav>
-    <div class="container pt-3 pb-3">{{{body}}}</div>
+    <button type="button" class="btn btn-primary add" id="add">ADD</button>
+    <button
+      type="button"
+      class="btn btn-info filter"
+      id="filter"
+    >FILTER</button>
+    <div class="table-users">{{{body}}}</div>
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     ></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/assets/Js/info.js"></script>
   </body>
 </html>
