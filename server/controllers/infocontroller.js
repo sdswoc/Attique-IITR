@@ -11,15 +11,32 @@ let date = DateTime.local();
 exports.view = (req, res) => {
   if (req.session.userinfo) {
     console.log("welcome to the first connection");
+    const { branch, year } = req.cookies;
 
-    db.query("SELECT * FROM acadinformation", (err, rows) => {
-      if (!err) {
-        console.log('wtf')
-        res.render("data", { layout: "information", data: rows });
-      } else {
-        console.log(err);
+    db.query(
+      `SELECT enrollment_number from students where branch_id=${branch} and role_id=1 and study_year=${year}`,
+      (err, rows) => {
+        if (err) throw err;
+        let query = "";
+        for (let i = 0; i < rows.length; i++) {
+          query += rows[i].enrollment_number;
+          if (rows.length > 1 && i < rows.length) {
+            query += " or";
+          }
+        }
+        db.query(
+          `SELECT * FROM acadinformation where enrollment_number= ${query} `,
+          (err, rows) => {
+            if (!err) {
+              console.log("wtf");
+              res.render("data", { layout: "information", data: rows });
+            } else {
+              console.log(err);
+            }
+          }
+        );
       }
-    });
+    );
   } else {
     res.redirect("/");
   }

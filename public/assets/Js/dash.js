@@ -30,49 +30,62 @@ function year() {
     if (year) {
       console.log("okay clicked");
       yearinput = year;
+      document.cookie = `branch=${branchinput};same-site=lax;httpOnly: true;max-age=${
+        60 * 60 * 24 * 14
+      }`;
+      document.cookie = `year=${yearinput};same-site=lax;httpOnly: true;max-age=${
+        60 * 60 * 24 * 14
+      }`;
       acadrequest();
     }
   })();
 }
-document.querySelectorAll(".a").forEach((item) => {
-  item.addEventListener("click", year);
-});
 function acadrequest() {
   axios.get("http://localhost:5000/acad").then((res) => {
     console.log(res);
   });
 }
 
-function branch1(){
-  branchinput=document.getElementById('1').value
+function branch1() {
+  branchinput = 1;
+  year();
 }
-function branch2(){
-  branchinput=document.getElementById('2').value
+function branch2() {
+  branchinput = 7;
+  year();
 }
-function branch3(){
-  branchinput=document.getElementById('3').value
+function branch3() {
+  branchinput = 4;
+  year();
 }
-function branch4(){
-  branchinput=document.getElementById('4').value
+function branch4() {
+  branchinput = 3;
+  year();
 }
-function branch5(){
-  branchinput=document.getElementById('5').value
+function branch5() {
+  branchinput = 5;
+  year();
 }
-function branch6(){
-  branchinput=document.getElementById('6').value
+function branch6() {
+  branchinput = 2;
+  year();
 }
-function branch7(){
-  branchinput=document.getElementById('7').value
+function branch7() {
+  branchinput = 8;
+  year();
 }
-function branch8(){
-  branchinput=document.getElementById('8').value
+function branch8() {
+  branchinput = 6;
+  year();
 }
-function branch9(){
-  branchinput=document.getElementById('9').value
-}
-function branch10(){
-  branchinput=document.getElementById('10').value
-}
-function branch11(){
-  branchinput=document.getElementById('11').value
+
+function getCookie(name) {
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(";");
+  for (var i = 0; i < ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == " ") c = c.substring(1, c.length);
+    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+  }
+  return null;
 }
