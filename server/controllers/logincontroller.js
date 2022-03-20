@@ -44,7 +44,7 @@ exports.loginsubmit = (req, res) => {
 exports.login = (req, res) => {
   console.log("User Detected");
   if (req.session.userinfo) {
-    return res.redirect("/acad");
+    return res.redirect("/dashboard");
   } else {
     return res.sendFile("D:/Attique-IITR/views/screens/index.html"); //static file
   }

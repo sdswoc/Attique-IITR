@@ -30,6 +30,7 @@ function year() {
     if (year) {
       console.log("okay clicked");
       yearinput = year;
+      //use params
       document.cookie = `branch=${branchinput};same-site=lax;httpOnly: true;max-age=${
         60 * 60 * 24 * 14
       }`;
@@ -40,12 +41,21 @@ function year() {
     }
   })();
 }
-function acadrequest() {
-  axios.get("http://localhost:5000/acad").then((res) => {
-    console.log(res);
-  });
+async function acadrequest() {
+  await axios
+    .get("http://localhost:5000/acad", {
+      proxy: {
+        host: "127.0.0.1",
+        port: 5000,
+      },
+    })
+    .then((res) => {
+      window.location.href = "http://localhost:5000/acad";
+      console.log(res);
+    });
 }
 
+//bakwas
 function branch1() {
   branchinput = 1;
   year();
@@ -77,15 +87,4 @@ function branch7() {
 function branch8() {
   branchinput = 6;
   year();
-}
-
-function getCookie(name) {
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(";");
-  for (var i = 0; i < ca.length; i++) {
-    var c = ca[i];
-    while (c.charAt(0) == " ") c = c.substring(1, c.length);
-    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-  }
-  return null;
 }

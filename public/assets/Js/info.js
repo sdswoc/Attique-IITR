@@ -1,4 +1,6 @@
 let bool = 0;
+let message = "";
+let tagged = "";
 function add() {
   (async () => {
     const { value: text } = await Swal.fire({
@@ -18,6 +20,7 @@ function add() {
 
     if (text) {
       bool = 1;
+      message = text;
       filter();
     }
   })();
@@ -49,12 +52,39 @@ function filter() {
     if (tag) {
       if (bool) {
         bool = 0;
+        tagged = tag;
         swal.fire("Sent!!");
+        postmessage(message, tagged);
       } else {
+        tagged = tag;
         Swal.fire("Selected!!");
+        postfilter(tagged);
       }
     }
   })();
 }
 document.getElementById("add").addEventListener("click", add);
 document.getElementById("filter").addEventListener("click", filter);
+
+function postmessage(message, tag) {
+  axios
+    .post("/acad/addacadpost", {
+      message: `${message}`,
+      tag: `${tag}`,
+    })
+    .then((res) => {
+      window.location.href = "http://localhost:5000/acad";
+      console.log(res);
+    });
+}
+
+function postfilter(tag) {
+  axios
+    .post("/acad/filteracad", {
+      tag: `${tag}`,
+    })
+    .then((res) => {
+      console.log(res);
+      window.location.href = "http://localhost:5000/acad/filterviewacad";
+    });
+}
