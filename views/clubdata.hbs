@@ -1,0 +1,18 @@
+<div class="header">CLUBS</div>
+
+<table cellspacing="0">
+  <tr>
+    <th>Name</th>
+    <th>Date</th>
+    <th>Category</th>
+    <th width="230">Comments</th>
+  </tr>
+  {{#each data}}
+    <tr>
+      <td>{{this.email}}</td>
+      <td>{{this.time_stamp}}</td>
+      <td>{{this.tag}}</td>
+      <td>{{this.message}}</td>
+    </tr>
+  {{/each}}
+</table>

@@ -8,4 +8,5 @@ router.get("/", clubcontroller.clubview);
 router.post("/addclubpost", clubcontroller.addclub);
 router.post("/filterclub", clubcontroller.filterclub);
 router.post("/deleteclub", clubcontroller.deleteclub);
+router.post("/register", clubcontroller.signupentry);
 module.exports = router;

@@ -7,35 +7,33 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const bcrypt = require("bcrypt");
 
-//view data
+//view data  done hai
 exports.clubview = (req, res) => {
-  if (req.session.userinfo) {
-    console.log("welcome to the first club connection");
+  console.log("welcome to the first club connection");
 
-    db.query("SELECT * FROM clubinformation", (err, rows) => {
-      if (!err) {
-        res.render("data", { layout: "information", data: rows }); //change it for club
-      } else {
-        console.log(err);
-      }
-      console.log(rows);
-    });
-  } else {
-    res.redirect("/");
-  }
+  db.query("SELECT * FROM clubinformation", (err, rows) => {
+    if (!err) {
+      res.render("clubdata", { layout: "clubinformation", data: rows });
+    } else {
+      console.log(err);
+    }
+    console.log(rows);
+  });
 };
 
-//filling data
+//filling data  done
 exports.addclub = (req, res) => {
-  if (req.session.userinfo) {
+  if (req.session.clubinfo) {
     console.log("adding club post");
     console.log(req.body);
-    const { club_id, message, time_stamp, tag } = req.body;
+    time_stamp = "19-03-2022 22:15";
+    email = req.session.clubinfo;
+    const { message, tag } = req.body;
 
-    console.log({ club_id, time_stamp, message, tag });
+    console.log({ email, message, tag });
     db.query(
-      "INSERT INTO clubinformation (club_id,time_stamp,tag,message) VALUES(" +
-        db.escape(club_id) +
+      "INSERT INTO clubinformation (email,time_stamp,tag,message) VALUES(" +
+        db.escape(email) +
         "," +
         db.escape(time_stamp) +
         "," +
@@ -45,27 +43,27 @@ exports.addclub = (req, res) => {
         ")",
       (err, rows) => {
         if (!err) {
-          res.redirect("/acad"); //change it to club
+          res.redirect("/club");
         } else {
           console.log(err);
         }
       }
     );
   } else {
-    res.redirect("/");
+    res.redirect("/club");
   }
 };
 
-//filter the data
+//filter the data tmrw
 exports.filterclub = (req, res) => {
-  if (req.session.userinfo) {
+  if (req.session.clubinfo) {
     console.log(req.body);
     const tag = req.body.tag;
     db.query(
       "SELECT * FROM clubinformation WHERE tag=" + db.escape(tag),
       (err, rows) => {
         if (!err) {
-          res.render("data", { layout: "information", data: rows }); //change it for club
+          res.render("clubdata", { layout: "clubinformation", data: rows }); //change it for club
         } else {
           console.log(err);
         }
@@ -76,9 +74,9 @@ exports.filterclub = (req, res) => {
   }
 };
 
-//delete data
+//delete data abhi karna hai
 exports.deleteclub = (req, res) => {
-  if (req.session.userinfo) {
+  if (req.session.clubinfo) {
     const { msgID } = req.body;
     console.log("User requested to delete data");
     db.query(
@@ -92,11 +90,11 @@ exports.deleteclub = (req, res) => {
       }
     );
   } else {
-    res.redirect("/");
+    res.redirect("/club");
   }
 };
 
-//logincheck hashing
+//logincheck hashing  done
 exports.loginsubmit = (req, res) => {
   console.log("Club Login Attempted");
   console.log(req.body);
@@ -109,10 +107,13 @@ exports.loginsubmit = (req, res) => {
         if (rows[0] === undefined) {
           res.send("Club doesn't exist");
         } else {
-          const verified = bcrypt.compareSync(reqpassword, rows[0]["pass"]);
+          const verified = bcrypt.compareSync(
+            reqpassword,
+            rows[0]["master_key"]
+          );
           if (verified) {
             console.log("login succefull");
-            req.session.clubinfo = rows[0].club_id; //session
+            req.session.clubinfo = rows[0].email; //session
 
             res.redirect("/club");
           } else {
@@ -132,10 +133,8 @@ exports.clublogin = (req, res) => {
   if (req.session.clubinfo) {
     return res.redirect("/club");
   } else {
-    return res.sendFile("D:/Attique-IITR/views/screens/index.html"); //static file, have to change for club
+    return res.sendFile("/views/screens/clubsign.html", { root: "." });
   }
-
-  //static path
 };
 
 //logout
@@ -145,6 +144,40 @@ exports.logout = (req, res) => {
       return res.redirect("/club");
     }
     res.clearCookie(process.env.SESS_NAME);
-    res.redirect("/");
+    res.redirect("/club/login");
+  });
+};
+
+//clubsignup, private api
+exports.signupentry = (req, res) => {
+  console.log("sign-up nearabout finished");
+  console.log(req.body);
+  const { club_name, master_key, email, council } = req.body;
+
+  //Implementing hashing and storing data ....done
+  bcrypt.hash(master_key, 10, (err, hash) => {
+    if (!err) {
+      db.query(
+        "INSERT INTO club (club_name,email,master_key,council) VALUES (" +
+          db.escape(club_name) +
+          "," +
+          db.escape(email) +
+          "," +
+          db.escape(hash) +
+          "," +
+          db.escape(council) +
+          ")",
+        (err, row) => {
+          if (!err) {
+            console.log("yo!! welcome to the club fam");
+            res.redirect("/club/login");
+          } else {
+            console.log(err);
+          }
+        }
+      );
+    } else {
+      console.log(err);
+    }
   });
 };
