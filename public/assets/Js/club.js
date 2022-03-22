@@ -1,6 +1,7 @@
 let bool = 0;
 let message = "";
 let tagged = "";
+let clubinput = "";
 function add() {
   (async () => {
     const { value: text } = await Swal.fire({
@@ -31,8 +32,8 @@ function filter() {
     const inputOptions = new Promise((resolve) => {
       setTimeout(() => {
         resolve({
-          Submission: "Submission",
-          Exam: "Exam",
+          Workshop: "Workshop",
+          IntroTalk: "IntroTalk",
           Event: "Event",
         });
       }, 0);
@@ -58,13 +59,13 @@ function filter() {
       } else {
         tagged = tag;
         Swal.fire("Selected!!");
-        postfilter(tagged);
+        postfilter(tagged, clubinput);
       }
     }
   })();
 }
 document.getElementById("add").addEventListener("click", add);
-//document.getElementById("filter").addEventListener("click", filter);
+document.getElementById("filter").addEventListener("click", filterclub);
 
 function postmessage(message, tag) {
   axios
@@ -78,13 +79,51 @@ function postmessage(message, tag) {
     });
 }
 
-/*function postfilter(tag) {
+function postfilter(tag, club) {
   axios
-    .post("/acad/filteracad", {
+    .post("/club/filterclub", {
       tag: `${tag}`,
+      club: `${club}`,
     })
     .then((res) => {
       console.log(res);
-      window.location.href = "http://localhost:5000/acad/filterviewacad";
+      window.location.href = "http://localhost:5000/club/clubfilterender";
     });
-}*/
+}
+
+function filterclub() {
+  (async () => {
+    const { value: club } = await Swal.fire({
+      title: "Select Club",
+      input: "select",
+      inputOptions: {
+        Technical: {
+          SDSlabs: "SDSLabs",
+          MDG: "MDG", //mobiledev
+          DSG: "DSG", //datascience
+        },
+        Cultural: {
+          GeekGazette: "Geek Gazette", //getgeeky
+          Eco: "Eco", //savewater
+          Cinesec: "Cinesec", //cinema
+        },
+      },
+      inputPlaceholder: "Select a club",
+      showCancelButton: true,
+      inputValidator: (value) => {
+        return new Promise((resolve) => {
+          if (value === "") {
+            resolve("You need to select something :)");
+          } else {
+            resolve();
+          }
+        });
+      },
+    });
+
+    if (club) {
+      clubinput = club;
+      filter();
+    }
+  })();
+}

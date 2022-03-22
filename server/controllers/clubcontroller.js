@@ -6,19 +6,25 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const bcrypt = require("bcrypt");
+let bool = 0;
+let filteredata;
 
 //view data  done hai
 exports.clubview = (req, res) => {
-  console.log("welcome to the first club connection");
+  if (req.session.clubinfo || req.session.userinfo) {
+    console.log("welcome to the first club connection");
 
-  db.query("SELECT * FROM clubinformation", (err, rows) => {
-    if (!err) {
-      res.render("clubdata", { layout: "clubinformation", data: rows });
-    } else {
-      console.log(err);
-    }
-    console.log(rows);
-  });
+    db.query("SELECT * FROM clubinformation", (err, rows) => {
+      if (!err) {
+        res.render("clubdata", { layout: "clubinformation", data: rows });
+      } else {
+        console.log(err);
+      }
+      console.log(rows);
+    });
+  } else {
+    res.redirect("/");
+  }
 };
 
 //filling data  done
@@ -56,19 +62,40 @@ exports.addclub = (req, res) => {
 
 //filter the data tmrw
 exports.filterclub = (req, res) => {
-  if (req.session.clubinfo) {
+  if (req.session.clubinfo || req.session.userinfo) {
     console.log(req.body);
-    const tag = req.body.tag;
-    db.query(
-      "SELECT * FROM clubinformation WHERE tag=" + db.escape(tag),
-      (err, rows) => {
-        if (!err) {
-          res.render("clubdata", { layout: "clubinformation", data: rows }); //change it for club
-        } else {
-          console.log(err);
+    const { tag, club } = req.body;
+
+    db.query(`SELECT * FROM club WHERE club_name="${club}"`, (err, rows) => {
+      if (err) throw err;
+      db.query(
+        `SELECT * FROM clubinformation WHERE tag="${tag}" and email="${rows[0].email}"`,
+        (err, rows) => {
+          if (!err) {
+            filteredata = rows;
+            bool = 1;
+            console.log(rows);
+            res.render("clubdata", { layout: "clubinformation", data: rows });
+          } else {
+            console.log(err);
+          }
         }
-      }
-    );
+      );
+    });
+  } else {
+    res.redirect("/");
+  }
+};
+
+//render filtered data
+
+exports.clubfilterender = (req, res) => {
+  if (req.session.userinfo || req.session.clubinfo) {
+    if (bool) {
+      console.log("hello");
+      res.render("clubdata", { layout: "clubinformation", data: filteredata });
+      bool = 0;
+    }
   } else {
     res.redirect("/");
   }
