@@ -154,17 +154,28 @@ exports.deleteacad = (req, res) => {
   if (req.session.userinfo) {
     const { msgID } = req.body;
     console.log("User requested to delete data");
+
     db.query(
-      `DELETE FROM acadinformation WHERE msgID=${db.escape(msgID)}`,
+      `SELECT * FROM acadinformation WHERE msgID=${db.escape(msgID)}`,
       (err, rows) => {
-        if (!err) {
-          return res.redirect("/acad");
-        } else {
-          console.log(err);
+        if (err) throw err;
+        else {
+          if (req.session.userinfo === rows[0].enrollment_number) {
+            db.query(
+              `DELETE FROM acadinformation WHERE msgID=${db.escape(msgID)}`,
+              (err, rows) => {
+                if (!err) {
+                  return res.redirect("/acad");
+                } else {
+                  console.log(err);
+                }
+              }
+            );
+          }
         }
       }
     );
   } else {
-    res.redirect("/");
+    res.redirect("/acad");
   }
 };

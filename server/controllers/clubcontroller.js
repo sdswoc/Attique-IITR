@@ -20,7 +20,6 @@ exports.clubview = (req, res) => {
       } else {
         console.log(err);
       }
-      console.log(rows);
     });
   } else {
     res.redirect("/");
@@ -101,18 +100,30 @@ exports.clubfilterender = (req, res) => {
   }
 };
 
-//delete data abhi karna hai
+//delete 
 exports.deleteclub = (req, res) => {
   if (req.session.clubinfo) {
     const { msgID } = req.body;
+    console.log(msgID);
     console.log("User requested to delete data");
+
     db.query(
-      `DELETE FROM acadinformation WHERE msgID=${db.escape(msgID)}`,
+      `SELECT * FROM clubinformation WHERE msgID=${db.escape(msgID)}`,
       (err, rows) => {
-        if (!err) {
-          return res.redirect("/acad"); //change it for club
-        } else {
-          console.log(err);
+        if (err) throw err;
+        else {
+          if (req.session.clubinfo === rows[0].email) {
+            db.query(
+              `DELETE FROM clubinformation WHERE msgID=${db.escape(msgID)}`,
+              (err, rows) => {
+                if (!err) {
+                  return res.redirect("/club");
+                } else {
+                  console.log(err);
+                }
+              }
+            );
+          }
         }
       }
     );
