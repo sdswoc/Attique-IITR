@@ -7,8 +7,8 @@ app.use(express.json());
 exports.view = (req, res) => {
   if (req.session.userinfo) {
     console.log("Welcome aboard");
-    res.sendFile("D:/Attique-IITR/views/screens/dash.html");
-  } //static path
+    res.sendFile("/views/screens/dash.html", { root: "." });
+  } 
   else {
     res.redirect("/");
   }

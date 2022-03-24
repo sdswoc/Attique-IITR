@@ -6,19 +6,18 @@ const XMLHttpRequest = require("xhr2");
 const Http = new XMLHttpRequest();
 const db = require("D:/Attique-IITR/database"); //check path
 require("dotenv").config();
-router.get("/", (req, res) => {
-  return res.sendFile("D:/Attique-IITR/test.html");
-});
+let eno;
 
 router.get("/channeli", passport.authenticate("oauth2"));
 
 router.get(
   "/callback",
-  passport.authenticate("oauth2", { failureRedirect: "/acad", session: false }),
+  passport.authenticate("oauth2", { failureRedirect: "/", session: false }),
   function (req, res) {
     // Successful authentication, redirect home.
+    req.session.userinfo = eno;
     console.log("success");
-    res.redirect("/acad");
+    res.redirect("/dashboard");
   }
 );
 
@@ -42,7 +41,9 @@ passport.use(
         if (Http.readyState === XMLHttpRequest.DONE && Http.status === 200) {
           console.log(Http.responseText);
           const data = JSON.parse(Http.responseText);
+          console.log(data);
           const reqenrollment_number = data.student.enrolmentNumber;
+
           console.log(reqenrollment_number);
           db.query(
             "SELECT * FROM students WHERE enrollment_number=" +
@@ -50,10 +51,11 @@ passport.use(
             (err, rows) => {
               if (!err) {
                 if (rows[0] === undefined) {
-                  //kuch daalunga abhi
+                  signupauth(data);
+                  return cb(null, Http.responseText);
                 } else {
                   console.log(rows[0]);
-                  req.session.userinfo = rows[0].enrollment_number; //session
+                  eno = rows[0].enrollment_number; //session
                   return cb(null, Http.responseText);
                 }
               }
@@ -64,5 +66,46 @@ passport.use(
     }
   )
 );
+
+function signupauth(data) {
+  const enrollment_number = data.student.enrolmentNumber;
+  const email = data.contactInformation.instituteWebmailAddress;
+  const year = data.student.currentYear;
+  const first_name = data.person["fullName"];
+  const demobranch = data.student["branch name"];
+  let arr = demobranch.split("(");
+  let brancharr = arr[1].split(")");
+  const branch = brancharr[0];
+
+  db.query(
+    `SELECT * FROM branch WHERE branch_name = "${branch}"`,
+    (err, rows) => {
+      if (!err) {
+        const branch_id = rows[0].branch_id;
+        db.query(
+          "INSERT INTO students (enrollment_number,first_name,email,study_year,branch_id,role_id,pass) VALUES (" +
+            db.escape(enrollment_number) +
+            "," +
+            db.escape(first_name) +
+            "," +
+            db.escape(email) +
+            "," +
+            db.escape(year) +
+            "," +
+            db.escape(branch_id) +
+            ", 1,0" +
+            ")",
+          (err, row) => {
+            if (!err) {
+              console.log("yo!! welcome to the fam");
+            } else {
+              console.log(err);
+            }
+          }
+        );
+      }
+    }
+  );
+}
 
 module.exports = router;

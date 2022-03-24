@@ -46,16 +46,14 @@ exports.login = (req, res) => {
   if (req.session.userinfo) {
     return res.redirect("/dashboard");
   } else {
-    return res.sendFile("D:/Attique-IITR/views/screens/index.html"); //static file
+    return res.sendFile("/views/screens/index.html", { root: "." });
   }
-
-  //static path
 };
 
 //signup
 exports.signup = (req, res) => {
   console.log("signup detect");
-  res.sendFile("D:/Attique-IITR/views/screens/sign-up.html"); //static path
+  res.sendFile("/views/screens/sign-up.html", { root: "." });
 };
 //basic signup entry
 exports.signupentry = (req, res) => {
@@ -117,7 +115,52 @@ exports.signupentry = (req, res) => {
                         }
                       );
                     } else {
-                      res.send("User Already Exits");
+                      db.query(
+                        "SELECT * FROM students WHERE enrollment_number=" +
+                          db.escape(enrollment_number) +
+                          "AND pass=0",
+                        (err, rows) => {
+                          if (err) throw err;
+                          if (rows[0] === undefined) {
+                            res.send("USER ALREADY EXISTS");
+                          } else {
+                            db.query(
+                              "DELETE FROM students WHERE enrollment_number=" +
+                                db.escape(enrollment_number) +
+                                "AND pass=0",
+                              (err, rows) => {
+                                if (err) throw err;
+                                db.query(
+                                  "INSERT INTO students (enrollment_number,first_name,second_name,email,study_year,pass,branch_id,role_id) VALUES (" +
+                                    db.escape(enrollment_number) +
+                                    "," +
+                                    db.escape(first_name) +
+                                    "," +
+                                    db.escape(second_name) +
+                                    "," +
+                                    db.escape(email) +
+                                    "," +
+                                    db.escape(year) +
+                                    "," +
+                                    db.escape(hash) +
+                                    "," +
+                                    db.escape(branch_id) +
+                                    ", 1" +
+                                    ")",
+                                  (err, row) => {
+                                    if (!err) {
+                                      console.log("yo!! welcome to the fam");
+                                      res.redirect("/");
+                                    } else {
+                                      console.log(err);
+                                    }
+                                  }
+                                );
+                              }
+                            );
+                          }
+                        }
+                      );
                     }
                   } else console.log(err);
                 }
