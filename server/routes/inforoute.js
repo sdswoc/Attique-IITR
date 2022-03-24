@@ -7,4 +7,5 @@ router.post("/addacadpost", infocontroller.addacad);
 router.post("/filteracad", infocontroller.filteracad);
 router.post("/deleteacad", infocontroller.deleteacad);
 router.get("/filterviewacad", infocontroller.filterender);
+router.post("/deleteacadpermission", infocontroller.deleteacadpermission);
 module.exports = router;

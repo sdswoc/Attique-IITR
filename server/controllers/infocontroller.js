@@ -8,6 +8,7 @@ const { DateTime } = require("luxon");
 let date = DateTime.local();
 let bool = 0;
 let filteredata;
+let delpermission = 0;
 //view data
 exports.view = (req, res) => {
   if (req.session.userinfo) {
@@ -151,31 +152,40 @@ exports.filterender = (req, res) => {
 
 //delete data
 exports.deleteacad = (req, res) => {
-  if (req.session.userinfo) {
-    const { msgID } = req.body;
-    console.log("User requested to delete data");
-
+  const { msgID } = req.body;
+  console.log("delete request accepted");
+  if (req.session.userinfo && delpermission === 1) {
     db.query(
-      `SELECT * FROM acadinformation WHERE msgID=${db.escape(msgID)}`,
+      `DELETE FROM acadinformation WHERE msgID=${db.escape(msgID)}`,
       (err, rows) => {
-        if (err) throw err;
-        else {
-          if (req.session.userinfo === rows[0].enrollment_number) {
-            db.query(
-              `DELETE FROM acadinformation WHERE msgID=${db.escape(msgID)}`,
-              (err, rows) => {
-                if (!err) {
-                  return res.redirect("/acad");
-                } else {
-                  console.log(err);
-                }
-              }
-            );
-          }
+        delpermission = 0;
+        if (!err) {
+          return res.redirect("/acad");
+        } else {
+          console.log(err);
         }
       }
     );
   } else {
     res.redirect("/acad");
+  }
+};
+
+//delpermission
+exports.deleteacadpermission = (req, res) => {
+  if (req.session.userinfo) {
+    const { msgID } = req.body;
+    console.log("User requested to delete data");
+    db.query(
+      `SELECT * FROM acadinformation WHERE msgID=${db.escape(msgID)}`,
+      (err, rows) => {
+        if (req.session.userinfo === rows[0].enrollment_number) {
+          delpermission = 1;
+          res.json({ success: "true" });
+        } else {
+          res.json({ success: "false" });
+        }
+      }
+    );
   }
 };
