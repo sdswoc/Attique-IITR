@@ -24,16 +24,26 @@ DROP TABLE IF EXISTS `acadinformation`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `acadinformation` (
   `enrollment_number` int DEFAULT NULL,
-  `time_stamp` varchar(255) DEFAULT NULL,
   `upvotes` int DEFAULT NULL,
   `tag` varchar(255) DEFAULT NULL,
   `message` varchar(360) DEFAULT NULL,
   `msgID` int NOT NULL AUTO_INCREMENT,
+  `time_stamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`msgID`),
   KEY `enrollment_number` (`enrollment_number`),
   CONSTRAINT `acadinformation_ibfk_1` FOREIGN KEY (`enrollment_number`) REFERENCES `students` (`enrollment_number`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `acadinformation`
+--
+
+LOCK TABLES `acadinformation` WRITE;
+/*!40000 ALTER TABLE `acadinformation` DISABLE KEYS */;
+INSERT INTO `acadinformation` VALUES (21112040,NULL,'Event','hi there',27,'2022-03-24 18:19:56'),(21112040,NULL,'Exam','2nd message',28,'2022-03-24 18:21:04');
+/*!40000 ALTER TABLE `acadinformation` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `branch`
@@ -50,6 +60,16 @@ CREATE TABLE `branch` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `branch`
+--
+
+LOCK TABLES `branch` WRITE;
+/*!40000 ALTER TABLE `branch` DISABLE KEYS */;
+INSERT INTO `branch` VALUES (1,'Chemical Engineering'),(2,'Civil Engineering'),(3,'Computer Science and Engineering'),(4,'Electrical Engineering'),(5,'Electronics and Communication Engineering'),(6,'Engineering Physics'),(7,'Mechanical Engineering'),(8,'Mathematics & Computing');
+/*!40000 ALTER TABLE `branch` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `club`
 --
 
@@ -61,10 +81,20 @@ CREATE TABLE `club` (
   `club_name` varchar(255) DEFAULT NULL,
   `master_key` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `council` int DEFAULT NULL,
+  `council` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`club_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `club`
+--
+
+LOCK TABLES `club` WRITE;
+/*!40000 ALTER TABLE `club` DISABLE KEYS */;
+INSERT INTO `club` VALUES (43,'SDSLabs','$2b$10$eEMcQzamYAZ4QW5I8Y4SSOyOpyWjR.KTrFTcj5n5q9ixwR/FTq4je','sdslabs@iitr.ac.in','Technical'),(44,'GeekGazette','$2b$10$StxVLdfriS8stK07kTXqv.SdKqJF4MJLThnVup9JLmMt6LzsGYUAi','geek@iitr.ac.in','Cultural'),(45,'MDG','$2b$10$xr0KmtmmqBoyCPl1Icmf5uab1AY1L2k7czgbmcDtXXKus3egfQBRO','mdg@iitr.ac.in','Technical'),(46,'DSG','$2b$10$1vRnIAE3lWfuR9jHarJF/On9JHzgA6iKDzykoMNKLXz3ukRhoRcjG','dsg@iitr.ac.in','Technical'),(47,'Eco','$2b$10$Y.AMAypBTVplkH40DbWHrenv8Z5/4ORjtVd8QjkcLQxIPLfO8BR8.','eco@iitr.ac.in','Cultural');
+/*!40000 ALTER TABLE `club` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `clubinformation`
@@ -74,16 +104,25 @@ DROP TABLE IF EXISTS `clubinformation`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `clubinformation` (
-  `club_id` int DEFAULT NULL,
-  `time_stamp` varchar(255) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
   `upvotes` int DEFAULT NULL,
   `tag` varchar(255) DEFAULT NULL,
   `msgID` int NOT NULL AUTO_INCREMENT,
+  `message` varchar(360) DEFAULT NULL,
+  `time_stamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`msgID`),
-  KEY `club_id` (`club_id`),
-  CONSTRAINT `clubinformation_ibfk_1` FOREIGN KEY (`club_id`) REFERENCES `club` (`club_id`) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `club_id` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `clubinformation`
+--
+
+LOCK TABLES `clubinformation` WRITE;
+/*!40000 ALTER TABLE `clubinformation` DISABLE KEYS */;
+/*!40000 ALTER TABLE `clubinformation` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `role`
@@ -98,6 +137,16 @@ CREATE TABLE `role` (
   PRIMARY KEY (`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `role`
+--
+
+LOCK TABLES `role` WRITE;
+/*!40000 ALTER TABLE `role` DISABLE KEYS */;
+INSERT INTO `role` VALUES (1,'CR'),(2,'BR'),(3,'Student');
+/*!40000 ALTER TABLE `role` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `students`
@@ -127,6 +176,16 @@ CREATE TABLE `students` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `students`
+--
+
+LOCK TABLES `students` WRITE;
+/*!40000 ALTER TABLE `students` DISABLE KEYS */;
+INSERT INTO `students` VALUES (21112040,'Darshan ','Kumar','d_kumar@ch.iitr.ac.in',1,'$2b$10$OOUUmHQgqYIeQ426VJKhvO6GEQTfbkuglgnc.NHop1biMUBsRQ8.u',1,NULL,1),(21112041,'idk','idk','idk@email.com',1,'$2b$10$t2Y1RtPMjD2tWmcgeNAkv.1qhFT5WBhex6mfpUrN3QIk96wFwq6WG',4,NULL,1);
+/*!40000 ALTER TABLE `students` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `sub_branch`
 --
 
@@ -141,6 +200,16 @@ CREATE TABLE `sub_branch` (
   CONSTRAINT `sub_branch_ibfk_1` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`branch_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sub_branch`
+--
+
+LOCK TABLES `sub_branch` WRITE;
+/*!40000 ALTER TABLE `sub_branch` DISABLE KEYS */;
+INSERT INTO `sub_branch` VALUES ('N1',1),('N2',1),('N3',1),('Q1',7),('Q2',7),('Q3',7);
+/*!40000 ALTER TABLE `sub_branch` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -151,4 +220,4 @@ CREATE TABLE `sub_branch` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-02-25  3:18:46
+-- Dump completed on 2022-03-25  0:00:12
