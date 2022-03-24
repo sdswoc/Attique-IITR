@@ -14,13 +14,16 @@ exports.clubview = (req, res) => {
   if (req.session.clubinfo || req.session.userinfo) {
     console.log("welcome to the first club connection");
 
-    db.query("SELECT * FROM clubinformation", (err, rows) => {
-      if (!err) {
-        res.render("clubdata", { layout: "clubinformation", data: rows });
-      } else {
-        console.log(err);
+    db.query(
+      "SELECT * FROM clubinformation order by time_stamp desc",
+      (err, rows) => {
+        if (!err) {
+          res.render("clubdata", { layout: "clubinformation", data: rows });
+        } else {
+          console.log(err);
+        }
       }
-    });
+    );
   } else {
     res.redirect("/");
   }
@@ -31,16 +34,13 @@ exports.addclub = (req, res) => {
   if (req.session.clubinfo) {
     console.log("adding club post");
     console.log(req.body);
-    time_stamp = "19-03-2022 22:15";
     email = req.session.clubinfo;
     const { message, tag } = req.body;
 
     console.log({ email, message, tag });
     db.query(
-      "INSERT INTO clubinformation (email,time_stamp,tag,message) VALUES(" +
+      "INSERT INTO clubinformation (email,tag,message) VALUES(" +
         db.escape(email) +
-        "," +
-        db.escape(time_stamp) +
         "," +
         db.escape(tag) +
         "," +
@@ -68,7 +68,7 @@ exports.filterclub = (req, res) => {
     db.query(`SELECT * FROM club WHERE club_name="${club}"`, (err, rows) => {
       if (err) throw err;
       db.query(
-        `SELECT * FROM clubinformation WHERE tag="${tag}" and email="${rows[0].email}"`,
+        `SELECT * FROM clubinformation WHERE tag="${tag}" and email="${rows[0].email}" order by time_stamp desc`,
         (err, rows) => {
           if (!err) {
             filteredata = rows;
@@ -100,7 +100,7 @@ exports.clubfilterender = (req, res) => {
   }
 };
 
-//delete 
+//delete
 exports.deleteclub = (req, res) => {
   if (req.session.clubinfo) {
     const { msgID } = req.body;

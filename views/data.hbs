@@ -1,4 +1,5 @@
-<div class="header">Chemical Engineering</div>
+<div class="header">{{data.branch}}
+</div>
 <table cellspacing="0">
   <tr>
     <th>Name</th>
@@ -7,8 +8,8 @@
     <th width="230">Comments</th>
     <th></th>
   </tr>
-  {{#each data}}
-    <tr id={{this.msgID}}>
+  {{#each data.info}}
+    <tr id={{this.msgID}} hello>
       <td>{{this.enrollment_number}}</td>
       <td>{{this.time_stamp}}</td>
       <td>{{this.tag}}</td>

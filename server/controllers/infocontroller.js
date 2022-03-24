@@ -9,6 +9,7 @@ let date = DateTime.local();
 let bool = 0;
 let filteredata;
 let delpermission = 0;
+let branchname;
 //view data
 exports.view = (req, res) => {
   if (req.session.userinfo) {
@@ -28,14 +29,35 @@ exports.view = (req, res) => {
         }
 
         if (rows.length === 0) {
-          res.render("data", { layout: "information" });
+          db.query(
+            `SELECT * from branch where branch_id=${branch}`,
+            (err, rows) => {
+              if (err) throw err;
+              branchname = rows[0].branch_name;
+              let newData = { branch: branchname };
+              res.render("data", { layout: "information", data: newData });
+              console.log("hello");
+            }
+          );
         } else {
           db.query(
-            `SELECT * FROM acadinformation where enrollment_number= ${query} `,
+            `SELECT * FROM acadinformation where enrollment_number= ${query} order by time_stamp desc `,
             (err, rows) => {
               if (!err) {
                 console.log(req.session.userinfo);
-                res.render("data", { layout: "information", data: rows });
+
+                db.query(
+                  `SELECT * from branch where branch_id=${branch}`,
+                  (err, rows) => {
+                    if (err) throw err;
+                    branchname = rows[0].branch_name;
+                  }
+                );
+
+                let rowData = Object.values(JSON.parse(JSON.stringify(rows)));
+                let newData = { info: rowData, branch: branchname };
+                console.log(newData.info[0]);
+                res.render("data", { layout: "information", data: newData });
               } else {
                 console.log(err);
               }
@@ -57,9 +79,8 @@ exports.addacad = (req, res) => {
     const { message, tag } = req.body;
     enrollment_number = req.session.userinfo;
     const { branch, year } = req.cookies;
-    time_stamp = "19-03-2022 22:15";
 
-    console.log({ enrollment_number, time_stamp, message, tag });
+    console.log({ enrollment_number,message, tag });
 
     db.query(
       `SELECT * FROM STUDENTS WHERE enrollment_number= ${enrollment_number} and role_id=1 and branch_id=${branch} and study_year=${year}`,
@@ -69,10 +90,9 @@ exports.addacad = (req, res) => {
           res.send("Not Authorised to post");
         } else {
           db.query(
-            "INSERT INTO acadinformation (enrollment_number,time_stamp,tag,message) VALUES(" +
+            "INSERT INTO acadinformation (enrollment_number,tag,message) VALUES(" +
               db.escape(enrollment_number) +
-              "," +
-              db.escape(time_stamp) +
+            
               "," +
               db.escape(tag) +
               "," +
@@ -113,16 +133,33 @@ exports.filteracad = (req, res) => {
         }
 
         if (rows.length === 0) {
-          res.render("data", { layout: "information" });
+          db.query(
+            `SELECT * from branch where branch_id=${branch}`,
+            (err, rows) => {
+              if (err) throw err;
+              branchname = rows[0].branch_name;
+              let newData = { branch: branchname };
+              res.render("data", { layout: "information", data: newData });
+              console.log("hello");
+            }
+          );
         } else {
           db.query(
-            `SELECT * FROM acadinformation where enrollment_number= ${query} and tag="${tag}" `,
+            `SELECT * FROM acadinformation where enrollment_number= ${query} and tag="${tag}" order by time_stamp desc`,
             (err, rows) => {
               if (!err) {
+                db.query(
+                  `SELECT * from branch where branch_id=${branch}`,
+                  (err, rows) => {
+                    if (err) throw err;
+                    branchname = rows[0].branch_name;
+                  }
+                );
+
                 bool = 1;
                 console.log(req.session.userinfo);
-                filteredata = rows;
-                console.log(filteredata);
+                let rowData = Object.values(JSON.parse(JSON.stringify(rows)));
+                filteredata = { info: rowData, branch: branchname };
                 res.send(rows);
               } else {
                 console.log(err);
@@ -142,7 +179,7 @@ exports.filterender = (req, res) => {
   if (req.session.userinfo) {
     if (bool) {
       console.log("hello");
-      res.render("data", { layout: "information", data: filteredata });
+      res.render("data", { layout: "information", data: newData });
       bool = 0;
     }
   } else {
