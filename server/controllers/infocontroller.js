@@ -21,10 +21,11 @@ exports.view = (req, res) => {
       (err, rows) => {
         if (err) throw err;
         let query = "";
+        console.log(rows.length);
         for (let i = 0; i < rows.length; i++) {
           query += rows[i].enrollment_number;
-          if (rows.length > 1 && i < rows.length) {
-            query += " or";
+          if (rows.length > 1 && i < rows.length - 1) {
+            query += " or ";
           }
         }
 
@@ -40,6 +41,7 @@ exports.view = (req, res) => {
             }
           );
         } else {
+          console.log(query);
           db.query(
             `SELECT * FROM acadinformation where enrollment_number= ${query} order by time_stamp desc `,
             (err, rows) => {
