@@ -1,5 +1,5 @@
 const res = require("express/lib/response");
-const db = require("D:/Attique-IITR/database"); //check path
+const db = require("../../database.js", { root: "." }); //check path
 const express = require("express");
 const { use } = require("../routes/inforoute");
 const app = express();
@@ -80,7 +80,7 @@ exports.addacad = (req, res) => {
     enrollment_number = req.session.userinfo;
     const { branch, year } = req.cookies;
 
-    console.log({ enrollment_number,message, tag });
+    console.log({ enrollment_number, message, tag });
 
     db.query(
       `SELECT * FROM STUDENTS WHERE enrollment_number= ${enrollment_number} and role_id=1 and branch_id=${branch} and study_year=${year}`,
@@ -92,7 +92,6 @@ exports.addacad = (req, res) => {
           db.query(
             "INSERT INTO acadinformation (enrollment_number,tag,message) VALUES(" +
               db.escape(enrollment_number) +
-            
               "," +
               db.escape(tag) +
               "," +

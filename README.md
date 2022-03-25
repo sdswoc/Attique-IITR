@@ -20,6 +20,16 @@ Attique IITR has been built to solve the ever eminent issue of information manag
 
 - Clone the repository to your local system using `git clone -b` along with branch name and SSH Key.
 - Run the terminal in that folder and install all necessary packages using `npm install`.
+- Create a MySQL datbase and then place the database schema to your `C:/` drive or else Note :It is better to use the full path of the SQL file `file.sql` and then use command `mysql -u username -p database_name < file.sql` to import the schema to your database
+- Create `.env` file and then 
+`DB_HOST=your host name`
+ `DB_NAME=name of database`
+ `DB_USER=your database username`
+ `DB_PASS=your database password`
+ `SESS_NAME=session name`
+ `SESS_SECRET=session secret`
+ `CLIENT_ID=client ID for Oauth`
+ `CLIENT_SECRET=client secret for Oauth`  
 - Run the server with `npm start` and open `localhost:5000`. Now you're ready to start.  
 
 To start off, one could choose between Channel-i OAuth and a sign up form. Once registered and password set, one can simply sign in next time or use the OAuth feature every time. On the dashboard, choose the branch and year and you're set to go. All information is now at the tips of your fingers and you may know whatever you need to. Data about all branches- the events, syllabus, etc- and about the groups- every intro talk and lecture- is now readily available across IITR.

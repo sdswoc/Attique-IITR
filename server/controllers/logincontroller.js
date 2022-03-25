@@ -1,4 +1,4 @@
-const db = require("D:/Attique-IITR/database"); //check path
+const db = require("../../database.js", { root: "." }); //check path
 const express = require("express");
 const bcrypt = require("bcrypt");
 
