@@ -103,7 +103,7 @@ exports.signupentry = (req, res) => {
                           db.escape(hash) +
                           "," +
                           db.escape(branch_id) +
-                          ", 1" +
+                          ", 3" +
                           ")",
                         (err, row) => {
                           if (!err) {
