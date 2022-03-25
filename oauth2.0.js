@@ -97,6 +97,7 @@ function signupauth(data) {
             ")",
           (err, row) => {
             if (!err) {
+              eno = enrollment_number;
               console.log("yo!! welcome to the fam");
             } else {
               console.log(err);
