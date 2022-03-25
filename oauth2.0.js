@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const XMLHttpRequest = require("xhr2");
 const Http = new XMLHttpRequest();
-const db = require("D:/Attique-IITR/database"); //check path
+const db = require("./database.js"); //check path
 require("dotenv").config();
 let eno;
 
